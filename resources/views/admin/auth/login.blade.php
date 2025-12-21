@@ -25,10 +25,7 @@
     </head>
     <body class="hold-transition login-page">
         <div class="login-box">
-            <div class="login-logo"><a href="{{route('admin.login')}}"><b>Xổ Số</b></a></div>
-
             <div class="login-box-body">
-                <p class="login-box-msg">Login</p>
 
                 <form action="{{ route('admin.post.login') }}" method="post">
                     <div class="form-group has-feedback">
