@@ -1,4 +1,6 @@
 
+<script type="text/javascript" src="{{ url('assets/adv/vl-header-adx.js?v=' . time()) }}?v=1.0"></script>
+
 @if ($isDesktop)
     <script type="text/javascript" src="{{ url('assets/adv/vl-desktop-adx.js?v=' . time()) }}?v=1.0"></script>
 @else

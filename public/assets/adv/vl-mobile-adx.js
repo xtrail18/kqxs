@@ -43,7 +43,7 @@
             (function() {
                 var x = document.createElement('link');
                 x.setAttribute('rel', 'stylesheet');
-                x.setAttribute('href', 'https://xosovn.net/assets/adv/mobile-adx.css');
+                x.setAttribute('href', 'http://127.0.0.1:8000/assets/adv/mobile-adx.css');
                 document.head.append(x);
             })();
 

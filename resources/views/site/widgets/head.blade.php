@@ -179,7 +179,6 @@
     }
 
     #section-brand img {
-        height: 130px;
         object-fit: scale-down;
     }
 
@@ -367,6 +366,23 @@
 
         #section-brand p:first-of-type {
             display: block;
+        }
+
+        #section-brand p {
+            width: 100%;
+            box-sizing: border-box;
+            width: 98%;
+            max-width: 728px;
+            margin: 3px 0 !important;
+        }
+
+        #section-brand {
+            margin: 0 !important;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            align-items: start;
+            justify-items: center;
         }
 
     }

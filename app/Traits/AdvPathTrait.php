@@ -6,6 +6,7 @@ namespace App\Traits;
 
 trait AdvPathTrait
 {
+    
     // section-brand.js
     public function vlHeaderAdx()
     {
