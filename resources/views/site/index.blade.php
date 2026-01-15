@@ -2,11 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta name="robots" content="noindex, nofollow">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-
     <link rel="shortcut icon"
         href="{{ isset($settings['favicon']) && $settings['favicon'] != '' ? sourceSetting($settings['favicon']) : '/favicon.ico' }}"
         type="image/x-icon">
