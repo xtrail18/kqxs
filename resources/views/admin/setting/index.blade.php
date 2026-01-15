@@ -90,6 +90,15 @@
                                 @endif
                             </div>
 
+                            <div class="form-group clearfix">
+                                <label class="control-label">Sub Keywords: <small>(Mỗi từ khóa cách nhau bởi dấu phẩy)</small></label>
+                                @if (!empty($arrSettings) && isset($arrSettings['sub_keywords']))
+                                    <textarea name="sub_keywords" id="sub_keywords" placeholder="từ khóa 1, từ khóa 2, từ khóa 3...">{!! $arrSettings['sub_keywords'] !!}</textarea>
+                                @else
+                                    <textarea name="sub_keywords" id="sub_keywords" placeholder="từ khóa 1, từ khóa 2, từ khóa 3..."></textarea>
+                                @endif
+                            </div>
+
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group clearfix">

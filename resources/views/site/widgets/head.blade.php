@@ -386,6 +386,43 @@
         }
 
     }
+
+    /* Sub Keywords */
+    .sub-key {
+       margin: auto;
+        width: 100%;
+        max-width: 1140px;
+        min-width: 240px;
+    }
+    .sub-key-content {
+        margin-top: 20px;
+        float: left;
+        width: 53.5%;
+        position: relative;
+        padding-right: 16px;
+    }
+
+    .sub-key-item {
+        display: inline-block;
+        padding: 2px 4px;
+        color: #495057;
+        font-size: 13px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    @media screen and (max-width: 720px) {
+        .sub-key {
+            float: none;
+            width: 100%;
+            padding: 10px 15px;
+        }
+
+        .sub-key-item {
+            font-size: 12px;
+            padding: 5px 12px;
+        }
+    }
 </style>
 
 @php($siteCss = \DB::table('settings')->where('key', 'custom_css')->first())

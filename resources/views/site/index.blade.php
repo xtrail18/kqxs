@@ -2,11 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta name="robots" content="noindex, nofollow">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-
     <link rel="shortcut icon"
         href="{{ isset($settings['favicon']) && $settings['favicon'] != '' ? sourceSetting($settings['favicon']) : '/favicon.ico' }}"
         type="image/x-icon">
@@ -127,9 +124,23 @@
             @include('site.widgets.sidebar')
 
         </div>
+            <div class="sub-key">
+                <div class="sub-key-content">
+                    @if(!empty($settings['sub_keywords']))
+                    @php
+                        $subKeywords = array_map('trim', explode(',', $settings['sub_keywords']));
+                    @endphp
+                    @foreach($subKeywords as $keyword)
+                        @if(!empty($keyword))
+                            <a href="javascript:void(0);" class="sub-key-item">{{ $keyword }}</a>
+                        @endif
+                    @endforeach
+                @endif
+                </div>
+            </div>
     </main>
-
     {!! $navMobile ?? '' !!}
+     
 
     <footer class="footer" id="e_c" p="p-top-10 p-bo-10" h="P90ybwbbDGvSuxYOVzDkHA==">
         <section class="main-content">
@@ -164,9 +175,9 @@
 
                 <a href="{{ $href }}" class="nav-bottom-item"
                     title="{{ $title }}">{{ $title }}</a>
-
+                
             </div>
-
+            
             <div class="footer-content">
                 <div class="footer-add">
                     <div class="copyright">
