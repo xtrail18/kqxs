@@ -55,9 +55,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://kqxs3mien.online'),
+    'url' => env('APP_URL', 'https://kqxs.online'),
 
-    'domain' => 'https://kqxs3mien.online/',
+    'domain' => 'https://kqxs.online',
 
     'asset_url' => env('ASSET_URL'),
 
