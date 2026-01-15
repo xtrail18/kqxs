@@ -67,9 +67,7 @@
 
 @section('script')
     {{-- TinyMCE --}}
-    <script src="https://cdn.tiny.cloud/1/20k8adtl1yjf0qk4jevyespsr1tui4ue6oo7nk53307kx96z/tinymce/7/tinymce.min.js"
-            referrerpolicy="origin"></script>
-
+   <script src="https://cdn.tiny.cloud/1/f3mhhzhbg82qi276p3tkpleoswpsxfgssraxfrdcscwv4qe8/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
     <script>
         /**
          * Mở popup Laravel File Manager (LFM)
