@@ -12,12 +12,12 @@ class GenerateSitemapCommand extends Command
 {
     protected $signature = 'sitemap:generate';
     protected $description = 'Generate single sitemap.xml for home, search, genres, and articles';
-    private string $base = 'https://chuyenhot.net';
+    private string $base = 'https://kqxs.online';
     private int $MAX_URLS_ALLOWED = 50000; // chuẩn sitemap khuyến nghị
 
     public function handle()
     {
-        $this->info("Đang tạo sitemap cho chuyenhot.net (1 file duy nhất)...");
+        $this->info("Đang tạo sitemap cho kqxs.online (1 file duy nhất)...");
 
         // Thu thập URL
         $urls = [];
