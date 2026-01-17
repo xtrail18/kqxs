@@ -172,9 +172,11 @@
                         : '/';
                     $title = $firstGenre->name ?? 'Tin Xổ Số';
                 @endphp
-
                 <a href="{{ $href }}" class="nav-bottom-item"
                     title="{{ $title }}">{{ $title }}</a>
+
+                <a href="/sitemap.xml" class="nav-bottom-item"
+                    title="Sitemap">Sitemap</a>
                 
             </div>
             
