@@ -97,13 +97,15 @@
                     {{-- Tóm tắt --}}
                     <div class="form-group">
                         <label>Tóm tắt nội dung </label>
-                        <textarea name="excerpt" id="excerpt-editor" class="form-control" rows="2">{{ old('excerpt', $article->excerpt ?? '') }}</textarea>
+                        <textarea name="excerpt" id="excerpt-input" style="display:none">{!! old('excerpt', $article->excerpt ?? '') !!}</textarea>
+                        <div id="excerpt-editor">{!! old('excerpt', $article->excerpt ?? '') !!}</div>
                     </div>
 
                     {{-- Nội dung bài viết --}}
                     <div class="form-group">
                         <label>Nội dung bài viết</label>
-                        <textarea name="content" id="content-editor" class="form-control" rows="10">{{ old('content', $article->content ?? '') }}</textarea>
+                        <textarea name="content" id="content-input" style="display:none">{!! old('content', $article->content ?? '') !!}</textarea>
+                        <div id="content-editor">{!! old('content', $article->content ?? '') !!}</div>
                         <small class="text-muted">
                             Có thể dán trực tiếp <code>&lt;iframe&gt;</code> YouTube/Vimeo/… hoặc <code>&lt;video&gt;</code>, URL <code>.mp4</code>.
                         </small>
@@ -184,8 +186,91 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.tiny.cloud/1/20k8adtl1yjf0qk4jevyespsr1tui4ue6oo7nk53307kx96z/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
+    {{-- Quill.js CDN (miễn phí, BSD license) --}}
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+    <script>
+        // --- Image upload handler cho Quill ---
+        function quillImageHandler(quillInstance) {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+            input.onchange = async () => {
+                const file = input.files[0];
+                if (!file) return;
+                const formData = new FormData();
+                formData.append('file', file);
+                try {
+                    const res = await fetch('{{ route("admin.tinymce.upload") }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                        credentials: 'same-origin'
+                    });
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    const data = await res.json();
+                    const url = data.url || data.location;
+                    if (!url) throw new Error('Invalid response');
+                    const range = quillInstance.getSelection(true);
+                    quillInstance.insertEmbed(range.index, 'image', url);
+                    quillInstance.setSelection(range.index + 1);
+                } catch (err) {
+                    if (typeof toastr !== 'undefined') toastr.error('Upload thất bại: ' + err.message);
+                }
+            };
+        }
+
+        // --- Content Editor (đầy đủ tính năng) ---
+        const contentQuill = new Quill('#content-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: {
+                    container: [
+                        [{ 'header': [2, 3, 4, false] }],
+                        [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                        ['link', 'image', 'video', 'blockquote', 'code-block'],
+                        ['clean']
+                    ],
+                    handlers: {
+                        image: function() { quillImageHandler(contentQuill); }
+                    }
+                }
+            },
+            placeholder: 'Nhập nội dung bài viết...'
+        });
+
+        // --- Excerpt Editor (tính năng cơ bản) ---
+        const excerptQuill = new Quill('#excerpt-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    ['link'],
+                    ['clean']
+                ]
+            },
+            placeholder: 'Tóm tắt nội dung...'
+        });
+
+        // Sync real-time: mỗi khi nội dung thay đổi, cập nhật textarea ẩn
+        contentQuill.on('text-change', function() {
+            document.getElementById('content-input').value = contentQuill.root.innerHTML;
+        });
+        excerptQuill.on('text-change', function() {
+            document.getElementById('excerpt-input').value = excerptQuill.root.innerHTML;
+        });
+
+        // Sync lần đầu khi Quill init
+        document.getElementById('content-input').value = contentQuill.root.innerHTML;
+        document.getElementById('excerpt-input').value = excerptQuill.root.innerHTML;
+    </script>
 
     <script>
         @if (!$article)
@@ -210,57 +295,6 @@
         });
         @endif
 
-        function lfm(options, cb) {
-            const route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
-            const type = (options && options.type) ? options.type : 'file';
-            window.SetUrl = function(items) {
-                const file_path = items.map(item => item.url).join(',');
-                cb(file_path, items);
-                window.SetUrl = undefined;
-            };
-            window.open(route_prefix + '?type=' + type, 'FileManager',
-                'width=900,height=600,top=100,left=100,scrollbars=1');
-        }
-
-        tinymce.init({
-            selector: '#content-editor',
-            height: 520,
-            language: 'vi',
-            convert_urls: false,
-            plugins: 'code preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount emoticons',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | charmap emoticons | removeformat | code preview fullscreen',
-            extended_valid_elements: 'iframe[src|width|height|frameborder|scrolling|allowfullscreen|allow|style|class],video[src|controls|preload|poster|width|height],source[src|type]',
-            automatic_uploads: true,
-            images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
-                const formData = new FormData();
-                formData.append('file', blobInfo.blob(), blobInfo.filename());
-                fetch(`{{ route('admin.tinymce.upload') }}`, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                }).then(async res => {
-                    if (!res.ok) throw new Error('HTTP ' + res.status);
-                    const data = await res.json();
-                    if (!data.location) throw new Error('Invalid response');
-                    resolve(data.location);
-                }).catch(err => reject('Upload thất bại: ' + err.message));
-            }),
-            file_picker_callback: (callback, value, meta) => {
-                let type = (meta.filetype === 'image') ? 'image' : 'file';
-                lfm({ type }, (url, items) => callback(url));
-            },
-        });
-
-        tinymce.init({
-            selector: '#excerpt-editor',
-            height: 180,
-            menubar: false,
-            language: 'vi',
-            plugins: 'link lists',
-            toolbar: 'bold italic underline | bullist numlist | link unlink | removeformat',
-            convert_urls: false,
-        });
-
         // Preview ảnh avatar
         document.getElementById('avatar_file')?.addEventListener('change', e => {
             const file = e.target.files[0];
@@ -272,12 +306,10 @@
 
         // ======= Custom validate + Toastr error (kèm required avatar) =======
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('article-form');
+            const form = document.querySelector('form[action]');
             if (!form) return;
 
             form.addEventListener('submit', function(e) {
-                tinymce.triggerSave();
-
                 const errors = [];
 
                 const title = form.querySelector('[name="title"]').value.trim();
@@ -285,9 +317,10 @@
                 const genre = form.querySelector('[name="genre_id"]').value;
                 const published = form.querySelector('[name="published_at"]').value.trim();
 
-                const excerptText = tinymce.get('excerpt-editor')?.getContent({ format: 'text' }).replace(/\u00A0/g, ' ').trim() || '';
-                const contentText = tinymce.get('content-editor')?.getContent({ format: 'text' }).replace(/\u00A0/g, ' ').trim() || '';
-                const contentHtml = tinymce.get('content-editor')?.getContent({ format: 'html' }) || '';
+                // Lấy nội dung từ Quill
+                const excerptText = excerptQuill.getText().trim();
+                const contentText = contentQuill.getText().trim();
+                const contentHtml = contentQuill.root.innerHTML;
                 const hasMedia = /<(img|video|iframe)\b/i.test(contentHtml);
 
                 // Avatar required: nếu không có avatar sẵn và cũng không chọn mới
@@ -317,4 +350,18 @@
             });
         });
     </script>
+
+    <style>
+        #content-editor {
+            min-height: 500px;
+        }
+        #excerpt-editor {
+            min-height: 150px;
+        }
+        #content-editor .ql-editor,
+        #excerpt-editor .ql-editor {
+            font-size: 16px;
+            line-height: 1.75;
+        }
+    </style>
 @endsection

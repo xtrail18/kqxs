@@ -46,7 +46,8 @@
 
                     <div class="form-group clearfix">
                         <label class="control-label">Content: <strong class="red">*</strong></label>
-                        <textarea required name="content" id="content" rows="12">{!! old('content', $page->content ?? '<h2>Liên hệ Xổ Số</h2><p>Email: support@chuyenhot.net</p>') !!}</textarea>
+                        <textarea name="content" id="content-input" style="display:none">{!! old('content', $page->content ?? '<h2>Liên hệ Xổ Số</h2><p>Email: support@chuyenhot.net</p>') !!}</textarea>
+                        <div id="content-editor">{!! old('content', $page->content ?? '<h2>Liên hệ Xổ Số</h2><p>Email: support@chuyenhot.net</p>') !!}</div>
                     </div>
 
                     <input type="hidden" name="hidden" value="{{ old('hidden', $page->hidden ?? 0) }}">
@@ -66,141 +67,79 @@
 @endsection
 
 @section('script')
-    {{-- TinyMCE --}}
-   <script src="https://cdn.tiny.cloud/1/f3mhhzhbg82qi276p3tkpleoswpsxfgssraxfrdcscwv4qe8/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+    {{-- Quill.js CDN (miễn phí, BSD license) --}}
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
     <script>
-        /**
-         * Mở popup Laravel File Manager (LFM)
-         */
-        function lfm(options, cb) {
-            const route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
-            const type = (options && options.type) ? options.type : 'file';
-
-            window.SetUrl = function (items) {
-                const file_path = items.map(item => item.url).join(',');
-                cb(file_path, items);
-                window.SetUrl = undefined;
-            };
-
-            window.open(route_prefix + '?type=' + type, 'FileManager',
-                'width=900,height=600,top=100,left=100,scrollbars=1');
-        }
-
-        // --- TinyMCE: Main Editor ---
-        tinymce.init({
-            selector: '#content',
-            height: 560,
-            language: 'vi',
-            convert_urls: false,
-            browser_spellcheck: true,
-            contextmenu: false,
-
-            plugins: 'code preview searchreplace autolink autosave directionality visualblocks visualchars fullscreen ' +
-                     'image link media table advtable lists charmap pagebreak nonbreaking anchor insertdatetime advlist ' +
-                     'wordcount emoticons quickbars codesample',
-
-            menubar: 'file edit view insert format tools table help',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor ' +
-                     '| alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media ' +
-                     'table | codesample charmap emoticons | removeformat | code preview fullscreen',
-
-            quickbars_selection_toolbar: 'bold italic underline | quicklink blockquote | bullist numlist | h2 h3',
-            quickbars_insert_toolbar: 'image media table hr',
-
-            // Link options
-            default_link_target: '_blank',
-            link_default_protocol: 'https',
-            link_title: true,
-            rel_list: [
-                { title: 'nofollow', value: 'nofollow' },
-                { title: 'noopener', value: 'noopener' },
-                { title: 'noreferrer', value: 'noreferrer' }
-            ],
-            target_list: [
-                { title: 'Mở tab mới', value: '_blank' },
-                { title: 'Trong tab hiện tại', value: '' }
-            ],
-
-            // Cho phép nhúng iframe/video, script, vv.
-            extended_valid_elements: 'iframe[src|width|height|frameborder|scrolling|allowfullscreen|webkitallowfullscreen|' +
-                                     'mozallowfullscreen|allow|referrerpolicy|loading|style|class],video[src|controls|preload|' +
-                                     'poster|width|height],source[src|type],script[src|type|async|defer]',
-            valid_children: '+figure[iframe|video|source]',
-
-            // Paste cleanup
-            paste_data_images: false,
-            paste_webkit_styles: 'none',
-            paste_remove_styles_if_webkit: true,
-            paste_merge_formats: true,
-            cleanup_on_startup: true,
-            verify_html: true,
-
-            // Giao diện nội dung
-            content_style: `
-                :root{ --body-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans"; }
-                body{ font-family: var(--body-font); line-height:1.75; font-size:16px; color:#222; }
-                h1,h2,h3,h4{ line-height:1.35; margin: 1.25em 0 .6em; }
-                img{ max-width:100%; height:auto; }
-                figure{ margin: 1em auto; text-align:center; }
-                iframe, video{ max-width:100%; aspect-ratio:16/9; height:auto; }
-                table{ width:100%; border-collapse: collapse; }
-                table td, table th{ border:1px solid #e5e7eb; padding:8px; }
-                pre, code{ background:#f5f5f5; border-radius:6px; padding:.2em .4em; }
-            `,
-
-            // Upload ảnh qua route Laravel
-            automatic_uploads: true,
-            images_upload_credentials: true,
-            images_reuse_filename: false,
-
-            images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
+        // --- Image upload handler cho Quill ---
+        function quillImageHandler(quillInstance) {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+            input.onchange = async () => {
+                const file = input.files[0];
+                if (!file) return;
                 const formData = new FormData();
-                formData.append('file', blobInfo.blob(), blobInfo.filename());
-
-                fetch(`{{ route('admin.tinymce.upload') }}`, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    credentials: 'same-origin'
-                }).then(async (res) => {
+                formData.append('file', file);
+                try {
+                    const res = await fetch('{{ route("admin.tinymce.upload") }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                        credentials: 'same-origin'
+                    });
                     if (!res.ok) throw new Error('HTTP ' + res.status);
                     const data = await res.json();
-                    if (!data.location) throw new Error('Invalid response');
-                    resolve(data.location);
-                }).catch(err => reject('Upload thất bại: ' + err.message));
-            }),
+                    const url = data.url || data.location;
+                    if (!url) throw new Error('Invalid response');
+                    const range = quillInstance.getSelection(true);
+                    quillInstance.insertEmbed(range.index, 'image', url);
+                    quillInstance.setSelection(range.index + 1);
+                } catch (err) {
+                    alert('Upload thất bại: ' + err.message);
+                }
+            };
+        }
 
-            // File picker (LFM)
-            file_picker_types: 'image file media',
-            file_picker_callback: (callback, value, meta) => {
-                let type = 'file';
-                if (meta.filetype === 'image') type = 'image';
-                lfm({ type, prefix: '/filemanager' }, (url, items) => {
-                    const first = items?.[0] ?? null;
-                    callback(url, {
-                        text: first?.name || '',
-                        title: first?.name || ''
-                    });
-                });
+        const contentQuill = new Quill('#content-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: {
+                    container: [
+                        [{ 'header': [2, 3, 4, false] }],
+                        [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                        ['link', 'image', 'video', 'blockquote', 'code-block'],
+                        ['clean']
+                    ],
+                    handlers: {
+                        image: function() { quillImageHandler(contentQuill); }
+                    }
+                }
             },
-
-            autosave_interval: '30s',
-            autosave_prefix: 'tinymce-autosave-{path}{query}-{id}-',
-            autosave_restore_when_empty: true,
-            autosave_retention: '30m',
-
-            image_caption: true,
-            image_advtab: true,
-            toolbar_sticky: true,
-            statusbar: true,
-            branding: false,
+            placeholder: 'Nhập nội dung...'
         });
 
-        // Gửi form khi bấm nút SAVE
-        $(function(){
-            $('#submit').on('click', function(){
-                $('form').find('[type="submit"]').trigger('click');
-            });
+        // Sync real-time: mỗi khi nội dung thay đổi, cập nhật textarea ẩn
+        contentQuill.on('text-change', function() {
+            document.getElementById('content-input').value = contentQuill.root.innerHTML;
         });
+        // Sync lần đầu khi Quill init
+        document.getElementById('content-input').value = contentQuill.root.innerHTML;
     </script>
+
+    <style>
+        #content-editor {
+            min-height: 540px;
+        }
+        #content-editor .ql-editor {
+            font-size: 16px;
+            line-height: 1.75;
+        }
+    </style>
 @endsection
