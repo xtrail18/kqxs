@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ProxyController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\AssetProxyController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\XosoAjaxController;
@@ -201,9 +202,17 @@ Route::get('/storage/uploads/advs/{path?}', function ($path) {
     return $response;
 })->name('web.adv.banner');
 
+// Admin auth routes
 Route::get('/login', [AdminController::class, 'login'])->name('admin.login');
 Route::post('/login',  [AdminController::class, 'postLogin'])->name('admin.post.login');
 Route::post('/logout',  [AdminController::class, 'logout'])->name('admin.logout');
+
+// Frontend user auth routes
+Route::get('/dang-nhap', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/dang-nhap', [AuthController::class, 'login']);
+Route::get('/dang-ky', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/dang-ky', [AuthController::class, 'register']);
+Route::post('/dang-xuat', [AuthController::class, 'logout'])->name('logout');
 
 // web
 Route::any('ThongKeAjax/{action?}', [XosoAjaxController::class, 'forward'])->where('action', '.*')->defaults('service', 'ThongKeAjax');

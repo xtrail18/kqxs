@@ -18,6 +18,291 @@
 @endif
 
 <style>
+    /* ==================== MODERN HEADER STYLES ==================== */
+    .header-modern {
+        background: #ffffff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        padding: 0;
+        border-bottom: 1px solid #e8e8e8;
+    }
+
+    .header-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 20px;
+        gap: 15px;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    /* Menu toggle - hidden on desktop, shown on mobile */
+    .menu-toggle {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: #f5f5f5;
+        color: #333;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .menu-toggle:hover {
+        background: #e8e8e8;
+    }
+
+    .header-logo a {
+        display: flex;
+        align-items: center;
+    }
+
+    .header-logo-img {
+        height: 45px;
+        width: auto;
+        transition: transform 0.3s ease;
+    }
+
+    .header-logo a:hover .header-logo-img {
+        transform: scale(1.03);
+    }
+
+    .header-center {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .header-time {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f0f7ff;
+        padding: 8px 16px;
+        border-radius: 20px;
+        color: #1e3a5f;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .header-time svg {
+        color: #2d5a87;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Auth Buttons */
+    .auth-buttons {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-auth {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .btn-login {
+        background: #f5f5f5;
+        color: #333;
+        border: 1px solid #e0e0e0;
+    }
+
+    .btn-login:hover {
+        background: #e8e8e8;
+        border-color: #d0d0d0;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-register {
+        background: #c90205;
+        color: #fff;
+        border: none;
+        box-shadow: 0 2px 8px rgba(201, 2, 5, 0.3);
+    }
+
+    .btn-register:hover {
+        background: #a80104;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(201, 2, 5, 0.4);
+    }
+
+    /* User Dropdown */
+    .user-dropdown {
+        position: relative;
+    }
+
+    .user-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        color: #333;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .user-btn:hover {
+        background: #e8e8e8;
+    }
+
+    .user-btn svg {
+        color: #1e3a5f;
+    }
+
+    .user-name {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+        min-width: 180px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        z-index: 1001;
+        overflow: hidden;
+    }
+
+    .dropdown-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background 0.2s ease;
+        border: none;
+        background: none;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .dropdown-item:hover {
+        background: #f5f5f5;
+    }
+
+    .dropdown-item svg {
+        color: #666;
+    }
+
+    .logout-btn {
+        color: #dc3545;
+        border-top: 1px solid #eee;
+    }
+
+    .logout-btn svg {
+        color: #dc3545;
+    }
+
+    /* Mobile Responsive */
+    @media screen and (max-width: 768px) {
+        .header-wrapper {
+            padding: 10px 15px;
+        }
+
+        /* Show menu toggle on mobile */
+        .menu-toggle {
+            display: flex;
+        }
+
+        .header-center {
+            display: none;
+        }
+
+        .btn-auth span {
+            display: none;
+        }
+
+        .btn-auth {
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .btn-auth svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .user-name {
+            display: none;
+        }
+
+        .user-btn {
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .header-logo-img {
+            height: 38px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .header-wrapper {
+            padding: 8px 10px;
+            gap: 10px;
+        }
+
+        .menu-toggle {
+            width: 36px;
+            height: 36px;
+        }
+
+        .auth-buttons {
+            gap: 8px;
+        }
+    }
+
+    /* ==================== END HEADER STYLES ==================== */
+
     nav.nav_header {
         margin-bottom: 0;
     }
@@ -431,3 +716,25 @@
         {!! $siteCss->value !!}
     </style>
 @endif
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // User dropdown toggle
+        const userBtn = document.getElementById('userDropdownBtn');
+        const dropdown = document.getElementById('userDropdown');
+
+        if (userBtn && dropdown) {
+            userBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!dropdown.contains(e.target) && !userBtn.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        }
+    });
+</script>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vn">
+<html lang="vi">
 
 <head>
     <meta name="robots" content="noindex, nofollow">
@@ -103,15 +103,7 @@
 
 
 <body>
-    <header class="header">
-        <div class="main-content"><span class="btn-pushbar-3" data-pushbar-target="left"><img alt="menu xo so"
-                    class="icon-menu" src="{{ url('/images/ic_menu_24px.svg') }}"></span>
-            <div class="header-logo"><a href="/"> <img alt="trang chu xo so" class="header-logo-img"
-                        src="{{ isset($settings['logo']) && $settings['logo'] != '' ? sourceSetting($settings['logo']) : '/images/logo.svg' }}" width="135" height="48"> </a>
-            </div>
-            <div class="header-time">{{ today_vietnamese() }}</div>
-        </div>
-    </header>
+    @include('site.partials._header')
 
     {!! $nav ?? '' !!}
 
