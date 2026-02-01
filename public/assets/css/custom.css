@@ -477,3 +477,25 @@
 }
 
 sentinel {}
+
+/* Phóng to logo */
+.header-logo-img {
+  width: 144px !important;
+  height: 96px !important;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Căn giữa container của logo */
+.header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+a[href="/"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
