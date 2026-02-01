@@ -236,6 +236,7 @@ PROMPT;
         $metaKeywords = '';
         $excerpt = '';
         $content = '';
+        $genreId = 6;
 
         // Extract META section
         if (preg_match('/===META_START===(.+?)===META_END===/s', $response, $metaMatch)) {
@@ -275,16 +276,6 @@ PROMPT;
             return;
         }
 
-        // Tìm genre phù hợp (giải mã giấc mơ hoặc tin xổ số)
-        $genre = Genre::where('slug', 'giai-ma-giac-mo')->first()
-            ?? Genre::where('slug', 'tin-xo-so')->first()
-            ?? Genre::first();
-
-        if (!$genre) {
-            Log::error('No genre found for trending article');
-            return;
-        }
-
         // Tạo slug unique
         $slug = $this->uniqueSlug($title);
 
@@ -313,7 +304,7 @@ PROMPT;
 
         // Lưu bài viết
         $article = Article::create([
-            'genre_id' => $genre->id,
+            'genre_id' => $genreId,
             'title' => $title,
             'slug' => $slug,
             'excerpt' => $excerpt ?: Str::limit(strip_tags($content), 200),
