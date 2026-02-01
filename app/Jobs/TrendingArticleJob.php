@@ -298,6 +298,19 @@ PROMPT;
             return;
         }
 
+        // Generate thumbnail with DALL-E
+        $thumbnail = null;
+        $openai = new OpenAIService();
+
+        Log::info('Generating thumbnail with DALL-E', ['title' => $title]);
+        $thumbnail = $openai->generateThumbnail($title, $slug);
+
+        if ($thumbnail) {
+            Log::info('Thumbnail generated', ['path' => $thumbnail]);
+        } else {
+            Log::warning('Thumbnail generation failed, continuing without image');
+        }
+
         // Lưu bài viết
         $article = Article::create([
             'genre_id' => $genre->id,
@@ -305,6 +318,8 @@ PROMPT;
             'slug' => $slug,
             'excerpt' => $excerpt ?: Str::limit(strip_tags($content), 200),
             'content' => $content,
+            'thumbnail' => $thumbnail,
+            'avatar' => $thumbnail,
             'meta_title' => $title,
             'meta_description' => $metaDescription ?: Str::limit(strip_tags($content), 160),
             'meta_keywords' => $metaKeywords,
@@ -323,6 +338,7 @@ PROMPT;
             'title' => $title,
             'slug' => $slug,
             'genre' => $genre->slug,
+            'thumbnail' => $thumbnail,
         ]);
     }
 
