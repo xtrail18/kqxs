@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('news:xoso')->everyThirtyMinutes();
+        // $schedule->command('news:xoso')->everyThirtyMinutes();
 
         // Chạy job viết bài trending hằng ngày lúc 17h (Vietnam timezone)
         $schedule->job(new \App\Jobs\TrendingArticleJob())
