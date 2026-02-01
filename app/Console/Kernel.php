@@ -20,6 +20,13 @@ class Kernel extends ConsoleKernel
             ->timezone('Asia/Ho_Chi_Minh')
             ->withoutOverlapping()
             ->onOneServer();
+
+        // Chạy job viết bài dự đoán KQXS hằng ngày lúc 9h sáng (Vietnam timezone)
+        $schedule->job(new \App\Jobs\PredictionArticleJob())
+            ->dailyAt('09:00')
+            ->timezone('Asia/Ho_Chi_Minh')
+            ->withoutOverlapping()
+            ->onOneServer();
     }
 
     /**
