@@ -1,3 +1,68 @@
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "KQXS ONLINE",
+    "alternateName": "KQSX.Online – KQXS - Kết quả xổ số 3 miền - Nhanh và chính xác",
+    "@id": "https://kqxs.online/",
+    "url": "https://kqxs.online/",
+    "logo": "https://kqxs.online/storage/uploads/logo/logo-1769660360.png",
+    "image": "https://kqxs.online/storage/uploads/logo/logo-1769660360.png",
+    "description": "Kết quả Xổ Số (kqxs.online) – Cập nhật kết quả xổ số 3 miền Bắc, Trung, Nam nhanh & chính xác. Thống kê kqxsmb, kqxsmt, kqxsmn nhanh nhất",
+    "telephone": "0359121723",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "146 Săm Brăm, Ea Tam",
+        "addressLocality": "Buôn Ma Thuột",
+        "addressRegion": "Đắk Lắk",
+        "postalCode": "63000",
+        "addressCountry": "VN"
+    },
+    "sameAs": [
+        "https://www.facebook.com/kqxsonline1/",
+        "https://www.youtube.com/channel/UCbxlMw46jrmRzy2Uhj-wyNQ",
+        "https://www.pinterest.com/kqxsonline1",
+        "https://www.twitch.tv/kqxsonline",
+        "https://www.reddit.com/user/Icy-Antelope7394/",
+        "https://www.tumblr.com/kqxsonline1",
+        "https://gravatar.com/kqxsonline1",
+        "https://500px.com/p/kqxsonline",
+        "https://issuu.com/kqxsonline",
+        "https://x.com/kqxsonline11",
+        "https://vimeo.com/kqxsonline1",
+        "https://about.me/kqxsonline",
+        "https://linktr.ee/kqxsonline",
+        "https://heylink.me/kqxsonline/",
+        "https://www.instagram.com/kqxsonline",
+        "https://www.blogger.com/profile/08272991881097121320",
+        "https://sites.google.com/view/kqxsonline1",
+        "https://www.diigo.com/profile/kqxsonline1",
+        "https://github.com/kqxsonline1",
+        "https://bit.ly/4qVIblw"
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "✅Kết Quả Xổ Số Kiến Thiết 3 Miền",
+            "item": "https://kqxs.online/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "✅Trực Tiếp Kết Quả Xổ Số",
+            "item": "https://kqxs.online/"
+        }
+    ]
+}
+</script>
+
 <header class="header header-modern">
     <div class="header-wrapper">
         <div class="header-left">
