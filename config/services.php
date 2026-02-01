@@ -35,4 +35,9 @@ return [
         'token' => env('N8N_TOKEN', 'p3uX6a$L9v@R1yTz!K7nQ4wE0hF2jM5cZ8oB'),
     ],
 
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+        'model' => env('OPENAI_MODEL', 'gpt-4o-mini'),
+    ],
+
 ];
