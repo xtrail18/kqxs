@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
 
         // Chạy job viết bài trending hằng ngày lúc 17h (Vietnam timezone)
         $schedule->job(new \App\Jobs\TrendingArticleJob())
-            ->dailyAt('17:00')
+            ->dailyAt('10:00')
             ->timezone('Asia/Ho_Chi_Minh')
             ->withoutOverlapping()
             ->onOneServer();
