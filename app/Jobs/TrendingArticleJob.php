@@ -322,15 +322,7 @@ PROMPT;
         ]);
 
         // Gắn genre
-        $article->genres()->syncWithoutDetaching([$genre->id]);
-
-        Log::info('Trending article saved', [
-            'id' => $article->id,
-            'title' => $title,
-            'slug' => $slug,
-            'genre' => $genre->slug,
-            'thumbnail' => $thumbnail,
-        ]);
+        $article->genres()->syncWithoutDetaching([$genreId]);
     }
 
     protected function uniqueSlug(string $title): string
