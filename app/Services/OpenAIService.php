@@ -157,21 +157,30 @@ class OpenAIService
     protected function buildThumbnailPrompt(string $title): string
     {
         return <<<PROMPT
-Create a vibrant, eye-catching thumbnail image for a Vietnamese lottery and dream interpretation article.
+            Create a vibrant, eye-catching thumbnail image for a Vietnamese lottery results article.
 
-Topic: "{$title}"
+            Topic: "{$title}"
 
-Requirements:
-- Modern, clean design with Vietnamese aesthetic elements
-- Bright, warm colors (gold, red, lucky colors)
-- Include subtle lottery/lucky number visual elements (dice, lucky symbols, stars)
-- Dreamy, mystical atmosphere with soft lighting
-- Professional blog thumbnail style
-- NO TEXT in the image
-- NO faces or identifiable people
-- Safe for all audiences
-- 16:9 aspect ratio composition
-PROMPT;
+            Requirements:
+            - Modern, professional design with Vietnamese lottery aesthetic
+            - Color palette: Gold, red, deep blue, emerald green (Vietnamese lucky colors)
+            - Visual elements to include:
+            + Lottery balls with numbers floating or arranged artistically
+            + Golden ticket or lottery slip silhouettes
+            + Sparkles, light rays, and celebration effects
+            + Lucky symbols: coins, ingots, fortune wheels
+            + Abstract number patterns in background
+            - Atmosphere: Exciting, hopeful, celebratory mood
+            - Style: Clean, modern infographic/editorial thumbnail
+            - Lighting: Dramatic with golden highlights and soft glows
+            - Composition: 16:9 aspect ratio, centered focal point
+
+            Strict restrictions:
+            - NO text, letters, or readable numbers
+            - NO human faces or identifiable people
+            - NO real currency or brand logos
+            - Safe for all audiences
+        PROMPT;
     }
 
     /**
