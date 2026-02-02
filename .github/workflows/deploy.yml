@@ -38,10 +38,18 @@ jobs:
 
             # Clear caches
             php artisan cache:clear
-            php artisan queue:restart
 
             # Set permissions
             sudo chown -R www-data:www-data storage bootstrap/cache
             sudo chmod -R 775 storage bootstrap/cache
+
+            # Update supervisor config if changed
+            sudo cp deployment/supervisor.conf /etc/supervisor/conf.d/kqxs.conf
+            sudo supervisorctl reread
+            sudo supervisorctl update
+
+            # Restart queue workers
+            php artisan queue:restart
+            sudo supervisorctl restart kqxs-worker:*
 
             echo "Deployment completed at $(date)"
